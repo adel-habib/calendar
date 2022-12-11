@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	tpl, err := template.ParseFiles("./static/templates/temp.tpl", "./static/css/styles.css")
+	tpl, err := template.ParseFiles("./static/templates/temp.tpl", "./static/css/styles.css", "./static/logo.svg")
 	if err != nil {
 		log.Fatal(err)
 	}

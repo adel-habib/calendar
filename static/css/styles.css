@@ -1,3 +1,7 @@
+svg { 
+  background-color: rgb(230, 225, 225); 
+}
+
 .nRect {
   fill: white;
   stroke-width: 0.3;

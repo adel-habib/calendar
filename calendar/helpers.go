@@ -45,8 +45,11 @@ func NewDayGroup(t time.Time, p Position) (g DayGroup) {
 }
 
 func Header(year int) (header HeaderGroup) {
-	rect := minusculesvg.NewRect(FRAME, FRAME, WIDTH-2*FRAME, HEADER_HEIGHT, "headerRect")
-	text := minusculesvg.NewText(fmt.Sprint(year), FRAME, FRAME, "headerText")
+	rw := WIDTH - 2*FRAME
+	rect := minusculesvg.NewRect(FRAME, FRAME, rw, HEADER_HEIGHT, "headerRect")
+	text := minusculesvg.NewText(fmt.Sprint(year), FRAME+rw, HEADER_HEIGHT, "headerText")
+	text.DominantBaseline = "text-top"
+	text.TextAnchor = "end"
 	header.Rect = rect
 	header.Text = text
 	return

@@ -3,9 +3,12 @@
     <style>
         {{ template "styles.css" }}
     </style>
-    <g id="header">
+    <g id="cal-header">
         {{ $hrect := .Header.Rect}}
         <rect x="{{$hrect.X}}" y="{{$hrect.Y}}" width="{{$hrect.Width}}" height="{{$hrect.Height}}" class="{{$hrect.Class}}"> </rect>
+        {{ $htext := .Header.Text}}
+        <text x="{{$htext.X}}" y="{{$htext.Y}}" class="{{$htext.Class}}" dominant-baseline="{{ $htext.DominantBaseline }}" text-anchor="{{ $htext.TextAnchor }}"> {{ $htext.Text }}</text>
+        {{ template "logo.svg" }}
     </g>
     {{ range $index, $dayGroup := .DayGroups }} 
         <g id="{{$dayGroup.FormattedDate}}">
