@@ -1,0 +1,109 @@
+.nRect {
+  fill: white;
+  stroke-width: 0.3;
+  stroke: black;
+}
+
+.hRect {
+  fill: #009ff3;
+  stroke-width: 0.3;
+  stroke: black;
+}
+
+.fRect {
+  fill: #b6e6ff;
+  stroke-width: 0.3;
+  stroke: black;
+}
+
+.headerRect {
+  fill: #00457c;
+  stroke-width: 0.3;
+  stroke: #34568b;
+}
+
+.nText {
+  font-size: 7pt;
+  fill: black;
+}
+
+.dateText {
+  font-size: 20px;
+  fill: #00457c;
+  font-family: Verdana;
+  font-weight: bold;
+}
+
+.dayText {
+  font-size: 20px;
+  fill: #00457c;
+  font-family: Verdana;
+  font-weight: normal;
+}
+
+.monthText {
+  font-size: 11pt;
+  fill: #00457c;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.headerText {
+  font-size: 75pt;
+  fill: white;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.footerText {
+  font-size: 12pt;
+  fill: white;
+  font-family: Verdana;
+}
+
+.holidayText {
+  font-size: 3pt;
+  fill: #00457c;
+  font-family: Verdana;
+  font-weight: normal;
+}
+
+.oRect {
+  fill: #dae9f2;
+  stroke-width: 0.3;
+  stroke: black;
+}
+
+.calendarWeekText {
+  font-size: 15pt;
+  fill: #cdd1d3;
+  font-family: Verdana;
+  font-weight: bold;
+}
+
+.secondHolidayText {
+  font-size: 3pt;
+  fill: #77c3ff;
+  font-family: Verdana;
+  font-weight: normal;
+}
+
+.secondDateText {
+  font-size: 7pt;
+  fill: #77c3ff;
+  font-family: Verdana;
+  font-weight: bold;
+}
+
+.secondDayText {
+  font-size: 7pt;
+  fill: #77c3ff;
+  font-family: Verdana;
+  font-weight: normal;
+}
+
+.sRect {
+  fill: #b6e6ff;
+  stroke-width: 0.3;
+  stroke: black;
+}
