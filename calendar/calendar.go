@@ -40,9 +40,10 @@ type HeaderGroup struct {
 }
 
 type CalendarProps struct {
-	Year      int
-	Header    HeaderGroup
-	DayGroups []DayGroup
+	Year         int
+	Header       HeaderGroup
+	MonthsLabels []minusculesvg.Text
+	DayGroups    []DayGroup
 }
 
 func CalendarDayGroups(year int) (gs []DayGroup) {

@@ -3,12 +3,19 @@
     <style>
         {{ template "styles.css" }}
     </style>
+
     <g id="cal-header">
         {{ $hrect := .Header.Rect}}
         <rect x="{{$hrect.X}}" y="{{$hrect.Y}}" width="{{$hrect.Width}}" height="{{$hrect.Height}}" class="{{$hrect.Class}}"> </rect>
         {{ $htext := .Header.Text}}
         <text x="{{$htext.X}}" y="{{$htext.Y}}" class="{{$htext.Class}}" dominant-baseline="{{ $htext.DominantBaseline }}" text-anchor="{{ $htext.TextAnchor }}"> {{ $htext.Text }}</text>
         {{ template "logo.svg" }}
+    </g>
+
+    <g id="months-labels" class="monthText" dominant-baseline="middle" text-anchor="middle">
+        {{ range $index, $label := .MonthsLabels }}
+        <text x="{{$label.X}}" y="{{$label.Y}}"> {{ $label.Text }}</text>
+        {{ end }}
     </g>
     {{ range $index, $dayGroup := .DayGroups }} 
         <g id="{{$dayGroup.FormattedDate}}">

@@ -54,6 +54,22 @@ func Header(year int) (header HeaderGroup) {
 	header.Text = text
 	return
 }
+
+func NewMonthsLabels() (labels []minusculesvg.Text) {
+	gapHeight := RECT_HEIGHT
+	p := Position{x: 0.0, y: FRAME + HEADER_HEIGHT + (gapHeight / 2)}
+	for month := 1; month <= NUM_MONTHS; month++ {
+		cmonth := month
+		if month > 12 {
+			cmonth -= month - 12
+		}
+		p.x = (float64(month-1) * RECT_WIDTH) + (RECT_WIDTH / 2) + FRAME
+		text := minusculesvg.NewText(fmt.Sprint(time.Month(cmonth)), p.x, p.y, "monthText")
+		labels = append(labels, text)
+	}
+	return
+}
+
 func isWeekend(d time.Time) bool {
 	weekDay := d.Weekday()
 	if weekDay == time.Saturday || weekDay == time.Sunday {

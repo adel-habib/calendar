@@ -25,7 +25,7 @@ func main() {
 	}
 	dayGroups := calendar.CalendarDayGroups(2022)
 	header := calendar.Header(2022)
-	cal := calendar.CalendarProps{Year: 2022, Header: header, DayGroups: dayGroups}
+	cal := calendar.CalendarProps{Year: 2022, Header: header, DayGroups: dayGroups, MonthsLabels: calendar.NewMonthsLabels()}
 	tpl.Execute(f, cal)
 
 }
