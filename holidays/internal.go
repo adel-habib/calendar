@@ -57,15 +57,15 @@ func GermanHolidays(year int) (holidays []Holiday) {
 	FASTNACHT := newDate(y, m, d+1)
 
 	nationalHolidays := map[string]time.Time{
-		"Neujahr":                   NEUJAHR,
-		"Karfreitag":                KAR_FREITAG,
-		"Ostermontag":               OSTER_MONTAG,
-		"Christi Himmelfahrt":       CHRISTI_HIMMEL_FAHRT,
-		"Pfingstmontag":             PFINGST_MONTAG,
-		"Tag der Arbeit":            TAG_DER_ARBEIT,
-		"Tag der Deutschen Einheit": TAG_DER_DEUTSCHEN_EINHEIT,
-		"1. Weihnachtstag":          ERSTER_WEIHNACHTSTAG,
-		"2. Weihnachtstag":          ZWEITER_WEIHNACHTSTAG,
+		"Neujahr":             NEUJAHR,
+		"Karfreitag":          KAR_FREITAG,
+		"Ostermontag":         OSTER_MONTAG,
+		"Christi Himmelfahrt": CHRISTI_HIMMEL_FAHRT,
+		"Pfingstmontag":       PFINGST_MONTAG,
+		"Tag der Arbeit":      TAG_DER_ARBEIT,
+		"Deutsche Einheit":    TAG_DER_DEUTSCHEN_EINHEIT,
+		"1. Weihnachtstag":    ERSTER_WEIHNACHTSTAG,
+		"2. Weihnachtstag":    ZWEITER_WEIHNACHTSTAG,
 	}
 	// Date of local holidays.
 	regionalHolidays := map[string]time.Time{
@@ -103,13 +103,13 @@ func GermanHolidays(year int) (holidays []Holiday) {
 	}
 
 	for holiday, date := range nationalHolidays {
-		h := Holiday{name: holiday, date: date, federal: true, regions: []Region{DE}}
+		h := Holiday{Name: holiday, Date: date, Federal: true, Regions: []Region{DE}}
 		holidays = append(holidays, h)
 	}
 
 	for holiday, date := range regionalHolidays {
 		regions := regionalHolidaysRegions[holiday]
-		h := Holiday{name: holiday, date: date, federal: false, regions: regions}
+		h := Holiday{Name: holiday, Date: date, Federal: false, Regions: regions}
 		holidays = append(holidays, h)
 	}
 
@@ -130,19 +130,10 @@ func PreviousDayOfWeek(date time.Time, day time.Weekday) (prevDate time.Time) {
 	return
 }
 
-func contains(s []Region, e Region) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
-
 func GermanHolidaysByRegion(year int, region Region) (holidays []Holiday) {
 	hs := GermanHolidays(year)
 	for _, h := range hs {
-		if contains(h.regions, region) || h.federal {
+		if contains(h.Regions, region) || h.Federal {
 			holidays = append(holidays, h)
 		}
 	}
@@ -152,7 +143,7 @@ func GermanHolidaysByRegion(year int, region Region) (holidays []Holiday) {
 func GermanHolidaysNotInRegion(year int, region Region) (holidays []Holiday) {
 	hs := GermanHolidays(year)
 	for _, h := range hs {
-		if !contains(h.regions, region) && !h.federal {
+		if !contains(h.Regions, region) && !h.Federal {
 			holidays = append(holidays, h)
 		}
 	}

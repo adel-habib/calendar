@@ -1,3 +1,15 @@
+.lgs1 {
+  stop-color: #009ff3;
+}
+.lgs2 {
+  stop-color: #b6e6ff;
+}
+
+.holidayWeekEndRect {
+  fill: url(#weekEndHolidayGR);
+  stroke-width: 0.3;
+  stroke: black;
+}
 .nRect {
   fill: white;
   stroke-width: 0.3;
@@ -28,14 +40,14 @@
 }
 
 .dateText {
-  font-size: 20px;
+  font-size: 18px;
   fill: #00457c;
   font-family: Verdana;
   font-weight: bold;
 }
 
 .dayText {
-  font-size: 20px;
+  font-size: 18px;
   fill: #00457c;
   font-family: Verdana;
   font-weight: normal;
@@ -62,10 +74,11 @@
 }
 
 .holidayText {
-  font-size: 3pt;
+  font-size: 10px;
   fill: #00457c;
   font-family: Verdana;
   font-weight: normal;
+  text-anchor: end;
 }
 
 .oRect {

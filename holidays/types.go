@@ -8,17 +8,17 @@ import (
 type Region string
 
 type Holiday struct {
-	date    time.Time
-	name    string
-	regions []Region
-	federal bool
+	Date    time.Time
+	Name    string
+	Regions []Region
+	Federal bool
 }
 
 func (h Holiday) String() string {
-	if h.federal {
-		return fmt.Sprintf("{%v, %s, federal}", h.name, h.date.Format("2006-01-02"))
+	if h.Federal {
+		return fmt.Sprintf("{%v, %s, federal}", h.Name, h.Date.Format("2006-01-02"))
 	} else {
-		return fmt.Sprintf("{%v, %s,regions: %v}", h.name, h.date.Format("2006-01-02"), h.regions)
+		return fmt.Sprintf("{%v, %s,regions: %v}", h.Name, h.Date.Format("2006-01-02"), h.Regions)
 	}
 }
 

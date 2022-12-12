@@ -6,6 +6,7 @@ import (
 	"text/template"
 
 	"github.com/adel-habib/calendar/calendar"
+	"github.com/adel-habib/calendar/holidays"
 )
 
 func main() {
@@ -23,9 +24,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	dayGroups := calendar.CalendarDayGroups(2022)
+	hs := holidays.GermanHolidays(2022)
+	monthGroups := calendar.CalendarDayGroups(2022, hs)
 	header := calendar.Header(2022)
-	cal := calendar.CalendarProps{Year: 2022, Header: header, DayGroups: dayGroups, MonthsLabels: calendar.NewMonthsLabels()}
+	cal := calendar.CalendarProps{Year: 2022, Header: header, MonthGroups: monthGroups, MonthsLabels: calendar.NewMonthsLabels()}
 	tpl.Execute(f, cal)
 
 }
