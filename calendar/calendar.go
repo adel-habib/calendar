@@ -10,17 +10,15 @@ import (
 )
 
 const (
-	NUM_MONTHS         = 13
-	WIDTH              = 1920.0
-	HEIGHT             = 1080.0
-	FRAME              = 15.0
-	HEADER_HEIGHT      = 98.0
-	FOOTER_HEIGHT      = 62.0
-	UPPER_SPACE_HEIGHT = 45.0
-	LOWER_SPACE_HEIGHT = 20.0
-	RECT_HEIGHT        = (HEIGHT - HEADER_HEIGHT - FOOTER_HEIGHT - UPPER_SPACE_HEIGHT - LOWER_SPACE_HEIGHT - 2*FRAME) / 31
-	RECT_WIDTH         = (WIDTH - 2*FRAME) / NUM_MONTHS
-	TEST_FZ            = 20
+	NumMonths    = 13
+	SVGWidth     = 1920.0
+	SVGHeight    = 1080.0
+	FrameOffset  = 15.0
+	HeaderHeight = 98.0
+	FooterHeight = 62.0
+	RectHeight   = (SVGHeight - HeaderHeight - FooterHeight - 2*FrameOffset) / 31
+	RectWidth    = (SVGWidth - 2*FrameOffset) / NumMonths
+	TestFz       = 20
 )
 
 type Position struct {
@@ -55,7 +53,7 @@ type CalendarProps struct {
 func CalendarDayGroups(year int, s []holidays.Holiday) (ms map[string][]DayGroup) {
 	ms = make(map[string][]DayGroup)
 	yearCursor := year
-	for month := 1; month <= NUM_MONTHS; month++ {
+	for month := 1; month <= NumMonths; month++ {
 		var monthDayGroups []DayGroup
 
 		monthCursor := month
@@ -69,19 +67,19 @@ func CalendarDayGroups(year int, s []holidays.Holiday) (ms map[string][]DayGroup
 		for day := 1; day <= daysOfMonth; day++ {
 			dateCursor := time.Date(yearCursor, time.Month(monthCursor), day, 0, 0, 0, 0, time.UTC)
 
-			xOffset := FRAME
+			xOffset := FrameOffset
 			if yearCursor > year {
-				xOffset += RECT_WIDTH * 12
+				xOffset += RectWidth * 12
 			}
-			p := elementCoordinates(dateCursor, RECT_WIDTH, RECT_HEIGHT, xOffset, FRAME+HEADER_HEIGHT)
+			p := elementCoordinates(dateCursor, RectWidth, RectHeight, xOffset, FrameOffset+HeaderHeight)
 			group := NewDayGroup(dateCursor, p)
 
 			idx := holidays.Index(s, func(h holidays.Holiday) bool { return h.Date.Equal(dateCursor) })
 			if idx != -1 {
 				h := s[idx]
-				txt := minusculesvg.NewText(h.Name, p.x+RECT_WIDTH-(0.02*RECT_WIDTH), p.y+RECT_HEIGHT-(0.1*RECT_HEIGHT), "holidayText")
+				txt := minusculesvg.NewText(h.Name, p.x+RectWidth-(0.02*RectWidth), p.y+RectHeight-(0.1*RectHeight), "holidayText")
 				group.Texts = append(group.Texts, txt)
-				group.Rect.Class = "fRect"
+				group.Rect.Class = "holidayRect"
 				if isWeekend(dateCursor) {
 					group.Rect.Class = "holidayWeekEndRect"
 				}

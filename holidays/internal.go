@@ -13,7 +13,7 @@ func calculateEasterDate(year int) (easterDate time.Time) {
 	d := (19*a + m) % 30
 	n := (4 + k - q) % 7
 	e := (2*b + 4*c + 6*d + n) % 7
-	day := (22 + d + e)
+	day := 22 + d + e
 	month := time.March
 	easterDate = time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
 	return
@@ -25,60 +25,60 @@ func newDate(year int, month time.Month, day int) (d time.Time) {
 }
 func GermanHolidays(year int) (holidays []Holiday) {
 	// Fixed Holidays
-	NEUJAHR := newDate(year, time.January, 1)
-	HEILIGE_DER_DREI_KOENIGE := newDate(year, time.January, 6)
-	FRAUEN_TAG := newDate(year, time.March, 8)
-	TAG_DER_ARBEIT := newDate(year, time.May, 1)
-	MARIA_HIMMELFAHRT := newDate(year, time.August, 15)
-	WELT_KINDER_TAG := newDate(year, time.September, 20)
-	TAG_DER_DEUTSCHEN_EINHEIT := newDate(year, time.October, 3)
-	REFORMATIONSTAG := newDate(year, time.October, 31)
-	ALLERHEILIGEN := newDate(year, time.November, 1)
-	ERSTER_WEIHNACHTSTAG := newDate(year, time.December, 25)
-	ZWEITER_WEIHNACHTSTAG := newDate(year, time.December, 26)
+	Neujahr := newDate(year, time.January, 1)
+	HeiligeDerDreiKoenige := newDate(year, time.January, 6)
+	FrauenTag := newDate(year, time.March, 8)
+	TagDerArbeit := newDate(year, time.May, 1)
+	MariaHimmelfahrt := newDate(year, time.August, 15)
+	WeltKinderTag := newDate(year, time.September, 20)
+	TagDerDeutschenEinheit := newDate(year, time.October, 3)
+	Reformationstag := newDate(year, time.October, 31)
+	Allerheiligen := newDate(year, time.November, 1)
+	ErsterWeihnachtstag := newDate(year, time.December, 25)
+	ZweiterWeihnachtstag := newDate(year, time.December, 26)
 
 	// Easter-based Holidays
-	OSTER_SONNTAG := calculateEasterDate(year)
-	y, m, d := OSTER_SONNTAG.Date()
-	OSTER_MONTAG := newDate(y, m, d+1)
-	KAR_FREITAG := newDate(y, m, d-2)
-	CHRISTI_HIMMEL_FAHRT := newDate(y, m, d+39)
-	PFINGST_SONNTAG := newDate(y, m, d+49)
-	PFINGST_MONTAG := newDate(y, m, d+50)
-	FRONLEICHNAM := newDate(y, m, d+60)
-	ASCHERMITTWOCH := newDate(y, m, d-46)
+	OsterSonntag := calculateEasterDate(year)
+	y, m, d := OsterSonntag.Date()
+	OsterMontag := newDate(y, m, d+1)
+	KarFreitag := newDate(y, m, d-2)
+	ChristiHimmelFahrt := newDate(y, m, d+39)
+	PfingstSonntag := newDate(y, m, d+49)
+	PfingstMontag := newDate(y, m, d+50)
+	Fronleichnam := newDate(y, m, d+60)
+	Aschermittwoch := newDate(y, m, d-46)
 
 	NOV23 := newDate(year, time.November, 23)
-	BUSS_UND_BETTAG := PreviousDayOfWeek(NOV23, time.Wednesday)
+	BussUndBettag := PreviousDayOfWeek(NOV23, time.Wednesday)
 
-	WEIBERFASTNACHT := PreviousDayOfWeek(ASCHERMITTWOCH, time.Thursday)
-	ROSENMONTAG := PreviousDayOfWeek(ASCHERMITTWOCH, time.Monday)
+	WEIBERFASTNACHT := PreviousDayOfWeek(Aschermittwoch, time.Thursday)
+	ROSENMONTAG := PreviousDayOfWeek(Aschermittwoch, time.Monday)
 	y, m, d = ROSENMONTAG.Date()
 	FASTNACHT := newDate(y, m, d+1)
 
 	nationalHolidays := map[string]time.Time{
-		"Neujahr":             NEUJAHR,
-		"Karfreitag":          KAR_FREITAG,
-		"Ostermontag":         OSTER_MONTAG,
-		"Christi Himmelfahrt": CHRISTI_HIMMEL_FAHRT,
-		"Pfingstmontag":       PFINGST_MONTAG,
-		"Tag der Arbeit":      TAG_DER_ARBEIT,
-		"Deutsche Einheit":    TAG_DER_DEUTSCHEN_EINHEIT,
-		"1. Weihnachtstag":    ERSTER_WEIHNACHTSTAG,
-		"2. Weihnachtstag":    ZWEITER_WEIHNACHTSTAG,
+		"Neujahr":             Neujahr,
+		"Karfreitag":          KarFreitag,
+		"Ostermontag":         OsterMontag,
+		"Christi Himmelfahrt": ChristiHimmelFahrt,
+		"Pfingstmontag":       PfingstMontag,
+		"Tag der Arbeit":      TagDerArbeit,
+		"Deutsche Einheit":    TagDerDeutschenEinheit,
+		"1. Weihnachtstag":    ErsterWeihnachtstag,
+		"2. Weihnachtstag":    ZweiterWeihnachtstag,
 	}
 	// Date of local holidays.
 	regionalHolidays := map[string]time.Time{
-		"Heilige Drei Könige": HEILIGE_DER_DREI_KOENIGE,
-		"Frauen Tag":          FRAUEN_TAG,
-		"Buß- und Bettag":     BUSS_UND_BETTAG,
-		"Weltkindertag":       WELT_KINDER_TAG,
-		"Ostersonntag":        OSTER_SONNTAG,
-		"Pfingstsonntag":      PFINGST_SONNTAG,
-		"Fronleichnam":        FRONLEICHNAM,
-		"Mariä Himmelfahrt":   MARIA_HIMMELFAHRT,
-		"Reformationstag":     REFORMATIONSTAG,
-		"Allerheiligen":       ALLERHEILIGEN,
+		"Heilige Drei Könige": HeiligeDerDreiKoenige,
+		"Frauen Tag":          FrauenTag,
+		"Buß- und Bettag":     BussUndBettag,
+		"Weltkindertag":       WeltKinderTag,
+		"Ostersonntag":        OsterSonntag,
+		"Pfingstsonntag":      PfingstSonntag,
+		"Fronleichnam":        Fronleichnam,
+		"Mariä Himmelfahrt":   MariaHimmelfahrt,
+		"Reformationstag":     Reformationstag,
+		"Allerheiligen":       Allerheiligen,
 		"Rosenmontag":         ROSENMONTAG,
 		"Fastnacht":           FASTNACHT,
 		"Weiberfastnacht":     WEIBERFASTNACHT,
