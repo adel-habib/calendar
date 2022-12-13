@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1920 1080">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 {{.Props.Width }}  {{.Props.Height }}">
 
     <defs>
         <linearGradient id="weekEndHolidayGR">
@@ -9,15 +9,18 @@
       </defs>
       
     <style>
-        {{ template "styles.css" }}
+        {{ template "styles.css" .Props }}
     </style>
 
     <g id="cal-header">
         {{ $hrect := .Header.Rect}}
-        <rect x="{{$hrect.X}}" y="{{$hrect.Y}}" width="{{$hrect.Width}}" height="{{$hrect.Height}}" class="{{$hrect.Class}}"> </rect>
+        <rect id="header" x="{{$hrect.X}}" y="{{$hrect.Y}}" width="{{$hrect.Width}}" height="{{$hrect.Height}}" class="{{$hrect.Class}}"> </rect>
         {{ $htext := .Header.Text}}
         <text x="{{$htext.X}}" y="{{$htext.Y}}" class="{{$htext.Class}}" dominant-baseline="{{ $htext.DominantBaseline }}" text-anchor="{{ $htext.TextAnchor }}"> {{ $htext.Text }}</text>
-        {{ template "logo.svg" }}
+        {{$fa := .Props.LogoScalFactor | RoundFloat}}
+        <g id="itemis-logo" transform="translate(25,15) scale({{$fa}})">
+            {{ template "logo.svg" }}
+        </g>
     </g>
 
     <g id="months-labels" class="monthText" dominant-baseline="middle" text-anchor="middle">
@@ -39,4 +42,9 @@
         </g> 
 
     {{end }}
+
+    <g id="footer">
+        {{ $hrect := .Footer.Rect}}
+        <rect x="{{$hrect.X}}" y="{{$hrect.Y}}" width="{{$hrect.Width}}" height="{{$hrect.Height}}" class="{{$hrect.Class}}"> </rect>
+    </g>
 </svg>

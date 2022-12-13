@@ -40,28 +40,28 @@
 }
 
 .dateText {
-  font-size: 18px;
+  font-size: {{ .FontSize | ToInt }}px;
   fill: #00457c;
   font-family: Verdana, sans-serif;
   font-weight: bold;
 }
 
 .dayText {
-  font-size: 18px;
+  font-size: {{ .FontSize | ToInt }}px;
   fill: #00457c;
   font-family: Verdana, sans-serif;
   font-weight: normal;
 }
 
 .monthText {
-  font-size: 11pt;
+  font-size: {{ .MonthLabelFonzSize | ToInt }}px;
   fill: #00457c;
   font-family: sans-serif;
   font-weight: bold;
 }
 
 .headerText {
-  font-size: 75pt;
+  font-size:{{ .HeaderFonzSize | ToInt }}px;
   fill: white;
   font-family: sans-serif;
   font-weight: bold;

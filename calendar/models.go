@@ -2,41 +2,51 @@ package calendar
 
 import (
 	"encoding/xml"
-	"github.com/adel-habib/calendar/holidays"
-	"github.com/adel-habib/calendar/minusculeSVG"
 	"time"
+
+	"github.com/adel-habib/calendar/holidays"
+	minusculesvg "github.com/adel-habib/calendar/minusculeSVG"
 )
 
 const (
-	numMonths    = 13
-	svgWidth     = 1920.0
-	svgHeight    = 1080.0
-	margin       = 15.0
-	headerHeight = 98.0
-	footerHeight = 62.0
-	testFz       = 20
+	numMonths                 = 13
+	svgWidth                  = 1920.0
+	svgHeight                 = 1080.0
+	margin                    = 15.0
+	headerHeight              = 98.0
+	footerHeight              = 62.0
+	testFz                    = 20
+	itemisLogoWidthOriginal   = 283.46
+	itemisLogoHeighthOriginal = 81.86
 )
 
 type calendar struct {
-	year     int
-	region   holidays.Region
-	hs       []holidays.Holiday
-	geometry Geometry
+	year   int
+	region holidays.Region
+	hs     []holidays.Holiday
+	Props  Props
 }
 
-type Geometry struct {
-	Width        float64
-	Height       float64
-	Margin       float64
-	HeaderHeight float64
-	FooterHeight float64
-	RectHeight   float64
-	RectWidth    float64
-	NumMonths    float64
+type Props struct {
+	Width              float64
+	Height             float64
+	Margin             float64
+	HeaderHeight       float64
+	FooterHeight       float64
+	RectHeight         float64
+	RectWidth          float64
+	NumMonths          float64
+	LogoWidth          float64
+	LogoHeight         float64
+	LogoScalFactor     float64
+	FontSize           float64
+	MonthLabelFonzSize float64
+	HeaderFonzSize     float64
 }
 
 type bodyObject struct {
 	Year         int
+	Props        Props
 	Header       headerGroup
 	MonthsLabels []minusculesvg.Text
 	MonthGroups  map[string][]dayGroup
