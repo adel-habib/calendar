@@ -1,92 +1,56 @@
 package calendar
 
 import (
-	"encoding/xml"
-	"fmt"
-	"time"
-
+	"embed"
 	"github.com/adel-habib/calendar/holidays"
-	minusculesvg "github.com/adel-habib/calendar/minusculeSVG"
+	"os"
+	"text/template"
 )
 
-const (
-	NumMonths    = 13
-	SVGWidth     = 1920.0
-	SVGHeight    = 1080.0
-	FrameOffset  = 15.0
-	HeaderHeight = 98.0
-	FooterHeight = 62.0
-	RectHeight   = (SVGHeight - HeaderHeight - FooterHeight - 2*FrameOffset) / 31
-	RectWidth    = (SVGWidth - 2*FrameOffset) / NumMonths
-	TestFz       = 20
-)
+// embed templates in binary
+//go:embed static/*
+var efs embed.FS
 
-type Position struct {
-	x float64
-	y float64
+type Calendar interface {
+	Export(name string) error
+	SetResolution(width float64, height float64) *calendar
 }
 
-type DayGroup struct {
-	XMLName xml.Name            `xml:"g"`
-	Rect    minusculesvg.Rect   `xml:"rect"`
-	Texts   []minusculesvg.Text `xml:"text"`
-	Date    time.Time
-}
+var tpl *template.Template
 
-type MonthGroup struct {
-	DGs []DayGroup `xml:"g"`
-}
-
-type HeaderGroup struct {
-	XMLName xml.Name          `xml:"g"`
-	Rect    minusculesvg.Rect `xml:"rect"`
-	Text    minusculesvg.Text `xml:"text"`
-}
-
-type CalendarProps struct {
-	Year         int
-	Header       HeaderGroup
-	MonthsLabels []minusculesvg.Text
-	MonthGroups  map[string][]DayGroup
-}
-
-func CalendarDayGroups(year int, s []holidays.Holiday) (ms map[string][]DayGroup) {
-	ms = make(map[string][]DayGroup)
-	yearCursor := year
-	for month := 1; month <= NumMonths; month++ {
-		var monthDayGroups []DayGroup
-
-		monthCursor := month
-		if month > 12 {
-			yearCursor++
-			monthCursor = month - 12
-		}
-
-		daysOfMonth := time.Date(year, time.Month(monthCursor+1), 0, 0, 0, 0, 0, time.UTC).Day()
-
-		for day := 1; day <= daysOfMonth; day++ {
-			dateCursor := time.Date(yearCursor, time.Month(monthCursor), day, 0, 0, 0, 0, time.UTC)
-
-			xOffset := FrameOffset
-			if yearCursor > year {
-				xOffset += RectWidth * 12
-			}
-			p := elementCoordinates(dateCursor, RectWidth, RectHeight, xOffset, FrameOffset+HeaderHeight)
-			group := NewDayGroup(dateCursor, p)
-
-			idx := holidays.Index(s, func(h holidays.Holiday) bool { return h.Date.Equal(dateCursor) })
-			if idx != -1 {
-				h := s[idx]
-				txt := minusculesvg.NewText(h.Name, p.x+RectWidth-(0.02*RectWidth), p.y+RectHeight-(0.1*RectHeight), "holidayText")
-				group.Texts = append(group.Texts, txt)
-				group.Rect.Class = "holidayRect"
-				if isWeekend(dateCursor) {
-					group.Rect.Class = "holidayWeekEndRect"
-				}
-			}
-			monthDayGroups = append(monthDayGroups, group)
-		}
-		ms[fmt.Sprintf("%d-%02d-month-group", yearCursor, monthCursor)] = monthDayGroups
+func init() {
+	temp, err := template.ParseFS(efs, "static/temp.tpl", "static/styles.css", "static/logo.svg")
+	if err != nil {
+		panic(err)
 	}
-	return
+	tpl = temp
+}
+
+func NewCalendar(year uint, region holidays.Region) *calendar {
+	cal := &calendar{year: int(year), region: region, geometry: newGeometry(1920.0, 1080.0)}
+	cal.hs = holidays.GetHolidaysList(region, year, year+1)
+	return cal
+}
+
+func (c *calendar) SetResolution(width float64, height float64) *calendar {
+	c.geometry = newGeometry(width, height)
+	return c
+}
+
+func (c *calendar) Export(name string) error {
+	obj := newCalendarObject(int(c.year), c.hs, c.geometry)
+	f, err := os.Create(name)
+	defer func() {
+		if err := f.Close(); err != nil {
+			panic(err)
+		}
+	}()
+	if err != nil {
+		return err
+	}
+	err = tpl.Execute(f, obj)
+	if err != nil {
+		return err
+	}
+	return nil
 }

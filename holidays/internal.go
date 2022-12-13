@@ -140,6 +140,13 @@ func GermanHolidaysByRegion(year int, region Region) (holidays []Holiday) {
 	return
 }
 
+func GetHolidaysList(r Region, years ...uint) (s []Holiday) {
+	for _, v := range years {
+		s = append(s, GermanHolidaysByRegion(int(v), r)...)
+	}
+	return
+}
+
 func GermanHolidaysNotInRegion(year int, region Region) (holidays []Holiday) {
 	hs := GermanHolidays(year)
 	for _, h := range hs {
