@@ -6,9 +6,8 @@ import (
 )
 
 func main() {
-	err := calendar.NewCalendar(2022, holidays.SN).SetResolution(1280.0, 720.0).Export("cal.svg")
+	err := calendar.NewCalendar(2022, holidays.SN).SetResolution(1920.0, 1080.0).Export("cal.svg")
 	if err != nil {
 		return
 	}
-
 }

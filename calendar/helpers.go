@@ -60,11 +60,15 @@ func newDayGroup(t time.Time, p position, props *Props, s []holidays.Holiday) (g
 	return
 }
 
-func Newheader(year int, geometry Props) (header headerGroup) {
-	rw := geometry.Width - 2*geometry.Margin
-	rect := minusculesvg.NewRect(geometry.Margin, geometry.Margin, rw, geometry.HeaderHeight, "headerRect")
-	text := minusculesvg.NewText(fmt.Sprint(year), geometry.Margin+rw, geometry.HeaderHeight, "headerText")
-	text.DominantBaseline = "text-top"
+func Newheader(year int, props Props) (header headerGroup) {
+	headerWidth := props.Width - 2*props.Margin
+	rect := minusculesvg.NewRect(props.Margin, props.Margin, headerWidth, props.HeaderHeight, "headerRect")
+	x := props.Margin + headerWidth
+	y := props.Margin + (props.HeaderHeight / 2.0)
+	text := minusculesvg.NewText(fmt.Sprint(year), x, y, "headerText")
+	// center vertically
+	text.DominantBaseline = "central"
+	// shift the text such that the end of the resulting rendered text is at the initial current text position
 	text.TextAnchor = "end"
 	header.Rect = rect
 	header.Text = text
@@ -101,13 +105,14 @@ func isWeekend(d time.Time) bool {
 	return false
 }
 
-func newGeometry(width float64, height float64) Props {
+func newProps(width float64, height float64) Props {
 	g := Props{Width: width, Height: height}
 	g.NumMonths = numMonths
 	g.Margin = margin
-	g.HeaderHeight = (g.Height - g.Margin) * 0.1
-	g.FooterHeight = (g.Height - g.Margin) * 0.05
-	g.RectHeight = (g.Height - g.HeaderHeight - g.FooterHeight - 2*margin) / 31
+	g.HeaderHeight = (g.Height - 2*g.Margin) * 0.1
+	g.FooterHeight = (g.Height - 2*g.Margin) * 0.08
+	// 31 days a month + gap between header and body + gap between body and footer
+	g.RectHeight = (g.Height - g.HeaderHeight - g.FooterHeight - 2*margin) / 33
 	g.RectWidth = (g.Width - 2*g.Margin) / g.NumMonths
 	g.LogoHeight = g.HeaderHeight * 0.8
 	g.LogoWidth = g.LogoHeight * 3.5

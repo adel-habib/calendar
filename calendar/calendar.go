@@ -3,6 +3,7 @@ package calendar
 import (
 	"embed"
 	"fmt"
+	"io"
 	"os"
 	"text/template"
 
@@ -14,21 +15,28 @@ import (
 var efs embed.FS
 
 type Calendar interface {
+	Write(w io.Writer) error
 	Export(name string) error
 	SetResolution(width float64, height float64) *calendar
 }
 
 var tpl *template.Template
 
+// template functions
+var funcMap = template.FuncMap{
+	"RoundFloat": func(value float64) string {
+		return fmt.Sprintf("%.2f", value)
+	},
+	"ToInt": func(value float64) string {
+		return fmt.Sprintf("%d", int(value))
+	},
+	"halve": func(value float64) string {
+		return fmt.Sprintf("%d", int(value/2))
+	},
+}
+
 func init() {
-	funcMap := template.FuncMap{
-		"RoundFloat": func(value float64) string {
-			return fmt.Sprintf("%.2f", value)
-		},
-		"ToInt": func(value float64) string {
-			return fmt.Sprintf("%d", int(value))
-		},
-	}
+	// parse templates on startup
 	temp, err := template.New("temp.tpl").Funcs(funcMap).ParseFS(efs, "static/temp.tpl", "static/styles.css", "static/logo.svg")
 	if err != nil {
 		panic(err)
@@ -37,13 +45,13 @@ func init() {
 }
 
 func NewCalendar(year uint, region holidays.Region) *calendar {
-	cal := &calendar{year: int(year), region: region, Props: newGeometry(1920.0, 1080.0)}
+	cal := &calendar{year: int(year), region: region, Props: newProps(1920.0, 1080.0)}
 	cal.hs = holidays.GetHolidaysList(region, year, year+1)
 	return cal
 }
 
 func (c *calendar) SetResolution(width float64, height float64) *calendar {
-	c.Props = newGeometry(width, height)
+	c.Props = newProps(width, height)
 	return c
 }
 
@@ -59,6 +67,14 @@ func (c *calendar) Export(name string) error {
 		return err
 	}
 	err = tpl.Execute(f, obj)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (c *calendar) Write(w io.Writer) error {
+	obj := newCalendarObject(int(c.year), c.hs, c.Props)
+	err := tpl.Execute(w, obj)
 	if err != nil {
 		return err
 	}
