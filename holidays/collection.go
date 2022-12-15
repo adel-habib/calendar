@@ -1,5 +1,9 @@
 package holidays
 
+import (
+	"time"
+)
+
 func Filter(s []Holiday, f func(Holiday) bool) (filteredS []Holiday) {
 	for _, h := range s {
 		if f(h) {
@@ -16,6 +20,16 @@ func All(s []Holiday, f func(Holiday) bool) bool {
 		}
 	}
 	return true
+}
+
+func IsAny(s []Holiday, dates ...time.Time) bool {
+	for _, d := range dates {
+		idx := Index(s, func(h Holiday) bool { return h.Date.Equal(d) })
+		if idx != -1 {
+			return true
+		}
+	}
+	return false
 }
 
 func Index(s []Holiday, f func(Holiday) bool) int {

@@ -128,6 +128,7 @@ func newCalendarObject(year int, s []holidays.Holiday, geometry Props) bodyObjec
 		Header:       Newheader(year, geometry),
 		MonthsLabels: newMonthsLabels(geometry),
 		MonthGroups:  monthsGroups(year, s, geometry),
+		WeekLabels:   kwLabels(year, s, &geometry),
 		Props:        geometry,
 		Footer:       newFooter(&geometry),
 	}
@@ -173,4 +174,34 @@ func pointsToPixels(pt float64) float64 {
 }
 
 func appendHolidayLabelText(dg *dayGroup, h holidays.Holiday) {
+}
+
+func kwLabels(year int, s []holidays.Holiday, p *Props) []minusculesvg.Text {
+	texts := make([]minusculesvg.Text, 0)
+	for month := time.January; month <= time.December; month++ {
+
+		daysOfMonth := time.Date(year, time.Month(month+1), 0, 0, 0, 0, 0, time.UTC).Day()
+
+		for day := 1; day <= daysOfMonth; day++ {
+			date := time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
+			if date.Weekday() == time.Monday {
+				for i := 0; i < 5; i++ {
+					dateCursor := date.AddDate(0, 0, i)
+					followingDate := dateCursor.AddDate(0, 0, 1)
+					if isWeekend(dateCursor) || isWeekend(followingDate) || daysOfMonth-dateCursor.Day() < 1 {
+						continue
+					}
+					if holidays.IsAny(s, dateCursor, followingDate) {
+						continue
+					}
+					p := dateToCoordinates(dateCursor, p.RectWidth, p.RectHeight, p.Margin+0.8*p.RectWidth, p.Margin+p.HeaderHeight+p.RectHeight*2)
+					_, w := dateCursor.ISOWeek()
+					text := minusculesvg.NewText(fmt.Sprintf("%02d", w), p.x, p.y, "dateText")
+					texts = append(texts, text)
+					break
+				}
+			}
+		}
+	}
+	return texts
 }

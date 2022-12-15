@@ -50,6 +50,7 @@ type bodyObject struct {
 	Header       headerGroup
 	MonthsLabels []minusculesvg.Text
 	MonthGroups  map[string][]dayGroup
+	WeekLabels   []minusculesvg.Text
 	Footer       headerGroup
 }
 

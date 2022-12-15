@@ -43,6 +43,12 @@
 
     {{end }}
 
+    <g id="kw-labels" class="calendarWeekText" dominant-baseline="auto">
+        {{ range $ii, $week := .WeekLabels }}
+        <text x="{{$week.X}}" y="{{$week.Y}}"> {{ $week.Text }}</text>
+        {{ end }}
+    </g>
+
     <g id="footer">
         {{ $hrect := .Footer.Rect}}
         <rect x="{{$hrect.X}}" y="{{$hrect.Y}}" width="{{$hrect.Width}}" height="{{$hrect.Height}}" class="{{$hrect.Class}}"> </rect>

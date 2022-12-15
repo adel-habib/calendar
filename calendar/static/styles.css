@@ -88,10 +88,10 @@
 }
 
 .calendarWeekText {
-  font-size: 15pt;
-  fill: #cdd1d3;
+  font-size: 40px;
+  fill: #8fcbe9;
   font-family: Verdana;
-  font-weight: bold;
+  text-anchor: end;
 }
 
 .secondHolidayText {
