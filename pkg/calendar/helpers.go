@@ -78,7 +78,10 @@ func Newheader(year int, props Props) (header headerGroup) {
 func newFooter(props *Props) (footer headerGroup) {
 	y := props.Height - props.Margin - props.FooterHeight
 	rect := minusculesvg2.NewRect(props.Margin, y, props.Width-2*props.Margin, props.FooterHeight, "headerRect")
+	text := minusculesvg2.NewText("calendar.itemis-leipzig.de/?year=2030&amp;region=Sachsen", props.Width/2, props.Height-(props.FooterHeight*0.8), "footerText")
 	footer.Rect = rect
+	footer.Text = text
+	fmt.Println(footer.Text.Text)
 	return
 }
 

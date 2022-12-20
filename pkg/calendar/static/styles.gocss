@@ -121,3 +121,7 @@
   stroke-width: 0.3;
   stroke: black;
 }
+.footerLink {
+  font-style: italic;
+  font-weight: bold;
+}

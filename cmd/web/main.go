@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/adel-habib/calendar/pkg/calendar"
 	"log"
 	"net/http"
 	"os"
@@ -11,12 +10,11 @@ import (
 type application struct {
 	errorLog      *log.Logger
 	infoLog       *log.Logger
-	snippets      *calendar.Calendar
 	templateCache map[string]*template.Template
 }
 
 func main() {
-	addr := getEnv("address", ":4000")
+	addr := getEnv("address", ":8000")
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 	app := &application{

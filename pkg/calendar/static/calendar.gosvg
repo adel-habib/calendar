@@ -68,8 +68,14 @@
         {{ end }}
     </g>
 
-    <g id="footer">
+    <g id="footer" class="footerText">
         {{ $hrect := .Footer.Rect}}
         <rect x="{{$hrect.X}}" y="{{$hrect.Y}}" width="{{$hrect.Width}}" height="{{$hrect.Height}}" class="{{$hrect.Class}}"> </rect>
+        {{ $ftext := .Footer.Text }}
+        <text x="{{$ftext.X}}" y="{{$ftext.Y}}" text-anchor="middle" dominant-baseline="hanging">
+            <tspan  x="{{$ftext.X}}" text-anchor="middle" >Für verschiedene Bundesländer und Jahre:</tspan>
+                <tspan class="footerLink"  x="{{$ftext.X}}" dy="1.5em"> {{$ftext.Text}}</tspan>
+
+        </text>
     </g>
 </svg>

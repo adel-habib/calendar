@@ -14,7 +14,6 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	buf := &bytes.Buffer{}
-
 	cal := calendar.NewCalendar(uint(params.Year), params.Region)
 	err = cal.Write(buf)
 	if err != nil {
