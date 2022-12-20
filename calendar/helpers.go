@@ -6,6 +6,7 @@ import (
 
 	"github.com/adel-habib/calendar/holidays"
 	minusculesvg "github.com/adel-habib/calendar/minusculeSVG"
+	"github.com/adel-habib/calendar/regions"
 )
 
 func (d dayGroup) FormattedDate() string {
@@ -122,9 +123,11 @@ func newProps(width float64, height float64) Props {
 	g.MonthLabelFonzSize = g.RectHeight * 0.5
 	return g
 }
-func newCalendarObject(year int, s []holidays.Holiday, geometry Props) bodyObject {
+func newCalendarObject(year int, region regions.Region, s []holidays.Holiday, geometry Props) bodyObject {
+
 	ob := bodyObject{
 		Year:         year,
+		Region:       region,
 		Header:       Newheader(year, geometry),
 		MonthsLabels: newMonthsLabels(geometry),
 		MonthGroups:  monthsGroups(year, s, geometry),
@@ -178,25 +181,38 @@ func appendHolidayLabelText(dg *dayGroup, h holidays.Holiday) {
 
 func kwLabels(year int, s []holidays.Holiday, p *Props) []minusculesvg.Text {
 	texts := make([]minusculesvg.Text, 0)
-	for month := time.January; month <= time.December; month++ {
-
-		daysOfMonth := time.Date(year, time.Month(month+1), 0, 0, 0, 0, 0, time.UTC).Day()
+	yearCursor := year
+	yearOffset := 0.0
+	for month := 1; month <= 13; month++ {
+		monthCursor := month
+		if month > 12 {
+			monthCursor = 1
+			yearCursor = year + 1
+			yearOffset = 12 * p.RectWidth
+		}
+		daysOfMonth := time.Date(yearCursor, time.Month(month+1), 0, 0, 0, 0, 0, time.UTC).Day()
 
 		for day := 1; day <= daysOfMonth; day++ {
-			date := time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
+			date := time.Date(yearCursor, time.Month(monthCursor), day, 0, 0, 0, 0, time.UTC)
 			if date.Weekday() == time.Monday {
 				for i := 0; i < 5; i++ {
 					dateCursor := date.AddDate(0, 0, i)
 					followingDate := dateCursor.AddDate(0, 0, 1)
-					if isWeekend(dateCursor) || isWeekend(followingDate) || daysOfMonth-dateCursor.Day() < 1 {
+					if isWeekend(dateCursor) || isWeekend(followingDate) || daysOfMonth-dateCursor.Day() < 2 {
 						continue
 					}
 					if holidays.IsAny(s, dateCursor, followingDate) {
 						continue
 					}
-					p := dateToCoordinates(dateCursor, p.RectWidth, p.RectHeight, p.Margin+0.8*p.RectWidth, p.Margin+p.HeaderHeight+p.RectHeight*2)
-					_, w := dateCursor.ISOWeek()
+					if yearCursor > year {
+						if dateCursor.After(time.Date(year+1, time.January, 31, 0, 0, 0, 0, time.UTC)) {
+							continue
+						}
+					}
+					p := dateToCoordinates(dateCursor, p.RectWidth, p.RectHeight, yearOffset+p.Margin+0.8*p.RectWidth, p.Margin+p.HeaderHeight+p.RectHeight*1.5)
+					wYear, w := dateCursor.ISOWeek()
 					text := minusculesvg.NewText(fmt.Sprintf("%02d", w), p.x, p.y, "dateText")
+					text.Id = fmt.Sprintf("kw-label-%d-%02d", wYear, w)
 					texts = append(texts, text)
 					break
 				}

@@ -8,6 +8,7 @@ import (
 	"text/template"
 
 	"github.com/adel-habib/calendar/holidays"
+	"github.com/adel-habib/calendar/regions"
 )
 
 // embed templates in binary
@@ -33,6 +34,12 @@ var funcMap = template.FuncMap{
 	"halve": func(value float64) string {
 		return fmt.Sprintf("%d", int(value/2))
 	},
+	"Inc": func(value int) int {
+		return value + 1
+	},
+	"Double": func(value float64) string {
+		return fmt.Sprintf("%.2f", value*2)
+	},
 }
 
 func init() {
@@ -44,7 +51,7 @@ func init() {
 	tpl = temp
 }
 
-func NewCalendar(year uint, region holidays.Region) *calendar {
+func NewCalendar(year uint, region regions.Region) *calendar {
 	cal := &calendar{year: int(year), region: region, Props: newProps(1920.0, 1080.0)}
 	cal.hs = holidays.GetHolidaysList(region, year, year+1)
 	return cal
@@ -56,7 +63,7 @@ func (c *calendar) SetResolution(width float64, height float64) *calendar {
 }
 
 func (c *calendar) Export(name string) error {
-	obj := newCalendarObject(int(c.year), c.hs, c.Props)
+	obj := newCalendarObject(int(c.year), c.region, c.hs, c.Props)
 	f, err := os.Create(name)
 	defer func() {
 		if err := f.Close(); err != nil {
@@ -73,7 +80,7 @@ func (c *calendar) Export(name string) error {
 	return nil
 }
 func (c *calendar) Write(w io.Writer) error {
-	obj := newCalendarObject(int(c.year), c.hs, c.Props)
+	obj := newCalendarObject(int(c.year), c.region, c.hs, c.Props)
 	err := tpl.Execute(w, obj)
 	if err != nil {
 		return err

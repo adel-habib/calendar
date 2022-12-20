@@ -6,6 +6,7 @@ import (
 
 	"github.com/adel-habib/calendar/holidays"
 	minusculesvg "github.com/adel-habib/calendar/minusculeSVG"
+	"github.com/adel-habib/calendar/regions"
 )
 
 const (
@@ -22,7 +23,7 @@ const (
 
 type calendar struct {
 	year   int
-	region holidays.Region
+	region regions.Region
 	hs     []holidays.Holiday
 	Props  Props
 }
@@ -46,6 +47,7 @@ type Props struct {
 
 type bodyObject struct {
 	Year         int
+	Region       regions.Region
 	Props        Props
 	Header       headerGroup
 	MonthsLabels []minusculesvg.Text

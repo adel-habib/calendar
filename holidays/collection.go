@@ -2,6 +2,8 @@ package holidays
 
 import (
 	"time"
+
+	"github.com/adel-habib/calendar/regions"
 )
 
 func Filter(s []Holiday, f func(Holiday) bool) (filteredS []Holiday) {
@@ -41,7 +43,7 @@ func Index(s []Holiday, f func(Holiday) bool) int {
 	return -1
 }
 
-func contains(s []Region, e Region) bool {
+func contains(s []regions.Region, e regions.Region) bool {
 	for _, a := range s {
 		if a == e {
 			return true

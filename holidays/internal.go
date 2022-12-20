@@ -1,6 +1,10 @@
 package holidays
 
-import "time"
+import (
+	"time"
+
+	"github.com/adel-habib/calendar/regions"
+)
 
 func calculateEasterDate(year int) (easterDate time.Time) {
 	a := year % 19
@@ -84,26 +88,26 @@ func GermanHolidays(year int) (holidays []Holiday) {
 		"Weiberfastnacht":     WEIBERFASTNACHT,
 	}
 
-	regionalHolidaysRegions := map[string][]Region{
-		"Heilige Drei Könige": {BW, BY, ST},
-		"Frauen Tag":          {BE},
-		"Buß- und Bettag":     {SN},
-		"Weltkindertag":       {TH},
-		"Ostersonntag":        {BB},
-		"Pfingstsonntag":      {BB},
-		"Fronleichnam":        {BW, BY, HE, ST, NW, RP, SL},
-		"Mariä Himmelfahrt":   {SL},
-		"Reformationstag":     {BB, HE, HB, HH, MV, NI, SN, ST, SH, TH},
-		"Allerheiligen":       {BW, BY, NV, RP, SL},
-		"Rosenmontag":         {BW},
-		"Fastnacht":           {BW},
-		"Weiberfastnacht":     {BW},
+	regionalHolidaysRegions := map[string][]regions.Region{
+		"Heilige Drei Könige": {regions.BW, regions.BY, regions.ST},
+		"Frauen Tag":          {regions.BE},
+		"Buß- und Bettag":     {regions.SN},
+		"Weltkindertag":       {regions.TH},
+		"Ostersonntag":        {regions.BB},
+		"Pfingstsonntag":      {regions.BB},
+		"Fronleichnam":        {regions.BW, regions.BY, regions.HE, regions.ST, regions.NW, regions.RP, regions.SL},
+		"Mariä Himmelfahrt":   {regions.SL},
+		"Reformationstag":     {regions.BB, regions.HE, regions.HB, regions.HH, regions.MV, regions.NI, regions.SN, regions.ST, regions.SH, regions.TH},
+		"Allerheiligen":       {regions.BW, regions.BY, regions.NV, regions.RP, regions.SL},
+		"Rosenmontag":         {regions.BW},
+		"Fastnacht":           {regions.BW},
+		"Weiberfastnacht":     {regions.BW},
 		// Rosenmontag, Fastnacht, Weiberfastnacht
 		// not an actual regional holiday but treated as such in regions where carnival is a big thing, e.g. Kölln
 	}
 
 	for holiday, date := range nationalHolidays {
-		h := Holiday{Name: holiday, Date: date, Federal: true, Regions: []Region{DE}}
+		h := Holiday{Name: holiday, Date: date, Federal: true, Regions: []regions.Region{regions.DE}}
 		holidays = append(holidays, h)
 	}
 
@@ -130,7 +134,7 @@ func PreviousDayOfWeek(date time.Time, day time.Weekday) (prevDate time.Time) {
 	return
 }
 
-func GermanHolidaysByRegion(year int, region Region) (holidays []Holiday) {
+func GermanHolidaysByRegion(year int, region regions.Region) (holidays []Holiday) {
 	hs := GermanHolidays(year)
 	for _, h := range hs {
 		if contains(h.Regions, region) || h.Federal {
@@ -140,14 +144,14 @@ func GermanHolidaysByRegion(year int, region Region) (holidays []Holiday) {
 	return
 }
 
-func GetHolidaysList(r Region, years ...uint) (s []Holiday) {
+func GetHolidaysList(r regions.Region, years ...uint) (s []Holiday) {
 	for _, v := range years {
 		s = append(s, GermanHolidaysByRegion(int(v), r)...)
 	}
 	return
 }
 
-func GermanHolidaysNotInRegion(year int, region Region) (holidays []Holiday) {
+func GermanHolidaysNotInRegion(year int, region regions.Region) (holidays []Holiday) {
 	hs := GermanHolidays(year)
 	for _, h := range hs {
 		if !contains(h.Regions, region) && !h.Federal {
