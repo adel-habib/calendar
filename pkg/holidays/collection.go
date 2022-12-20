@@ -1,9 +1,8 @@
 package holidays
 
 import (
+	"github.com/adel-habib/calendar/pkg/regions"
 	"time"
-
-	"github.com/adel-habib/calendar/regions"
 )
 
 func Filter(s []Holiday, f func(Holiday) bool) (filteredS []Holiday) {

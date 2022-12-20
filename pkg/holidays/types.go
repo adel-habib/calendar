@@ -2,9 +2,8 @@ package holidays
 
 import (
 	"fmt"
+	"github.com/adel-habib/calendar/pkg/regions"
 	"time"
-
-	"github.com/adel-habib/calendar/regions"
 )
 
 type Holiday struct {

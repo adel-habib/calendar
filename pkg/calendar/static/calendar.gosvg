@@ -9,7 +9,7 @@
     <defs>
         <style>
             <!-- Inject css styles -->
-            {{ template "styles.css" .Props }}
+            {{ template "styles.gocss" .Props }}
         </style>
 
         <!-- gradient to style days that are both a holiday and a weekend day (Sat, Sun) -->

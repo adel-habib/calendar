@@ -1,5 +1,7 @@
 package regions
 
+import "strings"
+
 type Region string
 
 const (
@@ -22,3 +24,34 @@ const (
 	NV Region = "Nordrhein-Westfalen"
 	NI Region = "Niedersachsen"
 )
+
+var SupportedRegions = [...]Region{
+	DE,
+	BW,
+	BY,
+	ST,
+	BB,
+	HE,
+	NW,
+	RP,
+	SL,
+	BE,
+	HB,
+	HH,
+	SN,
+	TH,
+	SH,
+	MV,
+	NV,
+	NI,
+}
+
+func RegionByName(name string) (int, *Region) {
+	for index, region := range SupportedRegions {
+		r := string(region)
+		if strings.EqualFold(r, name) {
+			return index, &region
+		}
+	}
+	return -1, nil
+}

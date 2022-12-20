@@ -3,12 +3,11 @@ package calendar
 import (
 	"embed"
 	"fmt"
+	"github.com/adel-habib/calendar/pkg/holidays"
+	"github.com/adel-habib/calendar/pkg/regions"
 	"io"
 	"os"
 	"text/template"
-
-	"github.com/adel-habib/calendar/holidays"
-	"github.com/adel-habib/calendar/regions"
 )
 
 // embed templates in binary
@@ -44,7 +43,7 @@ var funcMap = template.FuncMap{
 
 func init() {
 	// parse templates on startup
-	temp, err := template.New("temp.tpl").Funcs(funcMap).ParseFS(efs, "static/temp.tpl", "static/styles.css", "static/logo.svg")
+	temp, err := template.New("calendar.gosvg").Funcs(funcMap).ParseFS(efs, "static/calendar.gosvg", "static/styles.gocss", "static/logo.svg")
 	if err != nil {
 		panic(err)
 	}

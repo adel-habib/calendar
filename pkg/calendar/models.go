@@ -2,11 +2,10 @@ package calendar
 
 import (
 	"encoding/xml"
+	"github.com/adel-habib/calendar/pkg/holidays"
+	"github.com/adel-habib/calendar/pkg/minusculeSVG"
+	"github.com/adel-habib/calendar/pkg/regions"
 	"time"
-
-	"github.com/adel-habib/calendar/holidays"
-	minusculesvg "github.com/adel-habib/calendar/minusculeSVG"
-	"github.com/adel-habib/calendar/regions"
 )
 
 const (

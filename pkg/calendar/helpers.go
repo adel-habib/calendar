@@ -2,11 +2,10 @@ package calendar
 
 import (
 	"fmt"
+	holidays2 "github.com/adel-habib/calendar/pkg/holidays"
+	minusculesvg2 "github.com/adel-habib/calendar/pkg/minusculeSVG"
+	"github.com/adel-habib/calendar/pkg/regions"
 	"time"
-
-	"github.com/adel-habib/calendar/holidays"
-	minusculesvg "github.com/adel-habib/calendar/minusculeSVG"
-	"github.com/adel-habib/calendar/regions"
 )
 
 func (d dayGroup) FormattedDate() string {
@@ -25,33 +24,33 @@ func dateToCoordinates(t time.Time, rectWidth float64, rectHeight float64, xOffs
 	return
 }
 
-func newDayText(d time.Time, p position, props *Props) (label minusculesvg.Text, date minusculesvg.Text) {
+func newDayText(d time.Time, p position, props *Props) (label minusculesvg2.Text, date minusculesvg2.Text) {
 	dateOffsetX := props.RectWidth * 0.05
 	labelOffsetX := props.FontSize * 2
-	date = minusculesvg.NewText(fmt.Sprintf("%02d", d.Day()), p.x+dateOffsetX, p.y+props.FontSize, "dateText")
-	label = minusculesvg.NewText(fmt.Sprintf("%s", d.Weekday())[0:2], p.x+labelOffsetX, p.y+props.FontSize, "dayText")
+	date = minusculesvg2.NewText(fmt.Sprintf("%02d", d.Day()), p.x+dateOffsetX, p.y+props.FontSize, "dateText")
+	label = minusculesvg2.NewText(fmt.Sprintf("%s", d.Weekday())[0:2], p.x+labelOffsetX, p.y+props.FontSize, "dayText")
 	return
 }
 
-func newDayRect(d time.Time, p position, rectWidth float64, rectHeight float64) (rect minusculesvg.Rect) {
+func newDayRect(d time.Time, p position, rectWidth float64, rectHeight float64) (rect minusculesvg2.Rect) {
 	class := "defaultRect"
 	if isWeekend(d) {
 		class = "weekendRect"
 	}
-	rect = minusculesvg.NewRect(p.x, p.y, rectWidth, rectHeight, class)
+	rect = minusculesvg2.NewRect(p.x, p.y, rectWidth, rectHeight, class)
 	return
 }
 
-func newDayGroup(t time.Time, p position, props *Props, s []holidays.Holiday) (g dayGroup) {
+func newDayGroup(t time.Time, p position, props *Props, s []holidays2.Holiday) (g dayGroup) {
 	g.Rect = newDayRect(t, p, props.RectWidth, props.RectHeight)
 	g.Date = t
 	label, date := newDayText(t, p, props)
-	g.Texts = []minusculesvg.Text{label, date}
+	g.Texts = []minusculesvg2.Text{label, date}
 	// check of the day is a holiday
-	idx := holidays.Index(s, func(h holidays.Holiday) bool { return h.Date.Equal(t) })
+	idx := holidays2.Index(s, func(h holidays2.Holiday) bool { return h.Date.Equal(t) })
 	if idx != -1 {
 		h := s[idx]
-		txt := minusculesvg.NewText(h.Name, p.x+props.RectWidth-(0.02*props.RectWidth), p.y+props.RectHeight-(0.15*props.RectHeight), "holidayText")
+		txt := minusculesvg2.NewText(h.Name, p.x+props.RectWidth-(0.02*props.RectWidth), p.y+props.RectHeight-(0.15*props.RectHeight), "holidayText")
 		g.Texts = append(g.Texts, txt)
 		g.Rect.Class = "holidayRect"
 		if isWeekend(t) {
@@ -63,10 +62,10 @@ func newDayGroup(t time.Time, p position, props *Props, s []holidays.Holiday) (g
 
 func Newheader(year int, props Props) (header headerGroup) {
 	headerWidth := props.Width - 2*props.Margin
-	rect := minusculesvg.NewRect(props.Margin, props.Margin, headerWidth, props.HeaderHeight, "headerRect")
+	rect := minusculesvg2.NewRect(props.Margin, props.Margin, headerWidth, props.HeaderHeight, "headerRect")
 	x := props.Margin + headerWidth
 	y := props.Margin + (props.HeaderHeight / 2.0)
-	text := minusculesvg.NewText(fmt.Sprint(year), x, y, "headerText")
+	text := minusculesvg2.NewText(fmt.Sprint(year), x, y, "headerText")
 	// center vertically
 	text.DominantBaseline = "central"
 	// shift the text such that the end of the resulting rendered text is at the initial current text position
@@ -78,12 +77,12 @@ func Newheader(year int, props Props) (header headerGroup) {
 
 func newFooter(props *Props) (footer headerGroup) {
 	y := props.Height - props.Margin - props.FooterHeight
-	rect := minusculesvg.NewRect(props.Margin, y, props.Width-2*props.Margin, props.FooterHeight, "headerRect")
+	rect := minusculesvg2.NewRect(props.Margin, y, props.Width-2*props.Margin, props.FooterHeight, "headerRect")
 	footer.Rect = rect
 	return
 }
 
-func newMonthsLabels(g Props) (labels []minusculesvg.Text) {
+func newMonthsLabels(g Props) (labels []minusculesvg2.Text) {
 	gapHeight := g.RectHeight
 	p := position{x: 0.0, y: g.Margin + g.HeaderHeight + (gapHeight / 2)}
 	for month := 1; month <= numMonths; month++ {
@@ -92,7 +91,7 @@ func newMonthsLabels(g Props) (labels []minusculesvg.Text) {
 			cursor = month - 12
 		}
 		p.x = (float64(month-1) * g.RectWidth) + (g.RectWidth / 2) + margin
-		text := minusculesvg.NewText(fmt.Sprint(time.Month(cursor)), p.x, p.y, "monthText")
+		text := minusculesvg2.NewText(fmt.Sprint(time.Month(cursor)), p.x, p.y, "monthText")
 		labels = append(labels, text)
 	}
 	return
@@ -123,7 +122,7 @@ func newProps(width float64, height float64) Props {
 	g.MonthLabelFonzSize = g.RectHeight * 0.5
 	return g
 }
-func newCalendarObject(year int, region regions.Region, s []holidays.Holiday, geometry Props) bodyObject {
+func newCalendarObject(year int, region regions.Region, s []holidays2.Holiday, geometry Props) bodyObject {
 
 	ob := bodyObject{
 		Year:         year,
@@ -139,7 +138,7 @@ func newCalendarObject(year int, region regions.Region, s []holidays.Holiday, ge
 }
 
 // Create a group element for each day of the year
-func monthsGroups(year int, s []holidays.Holiday, g Props) map[string][]dayGroup {
+func monthsGroups(year int, s []holidays2.Holiday, g Props) map[string][]dayGroup {
 	monthDayGroupsMap := make(map[string][]dayGroup)
 	yearCursor := year
 	for month := 1; month <= numMonths; month++ {
@@ -176,11 +175,11 @@ func pointsToPixels(pt float64) float64 {
 	return pt * (96.0 / 72.0)
 }
 
-func appendHolidayLabelText(dg *dayGroup, h holidays.Holiday) {
+func appendHolidayLabelText(dg *dayGroup, h holidays2.Holiday) {
 }
 
-func kwLabels(year int, s []holidays.Holiday, p *Props) []minusculesvg.Text {
-	texts := make([]minusculesvg.Text, 0)
+func kwLabels(year int, s []holidays2.Holiday, p *Props) []minusculesvg2.Text {
+	texts := make([]minusculesvg2.Text, 0)
 	yearCursor := year
 	yearOffset := 0.0
 	for month := 1; month <= 13; month++ {
@@ -201,7 +200,7 @@ func kwLabels(year int, s []holidays.Holiday, p *Props) []minusculesvg.Text {
 					if isWeekend(dateCursor) || isWeekend(followingDate) || daysOfMonth-dateCursor.Day() < 2 {
 						continue
 					}
-					if holidays.IsAny(s, dateCursor, followingDate) {
+					if holidays2.IsAny(s, dateCursor, followingDate) {
 						continue
 					}
 					if yearCursor > year {
@@ -211,7 +210,7 @@ func kwLabels(year int, s []holidays.Holiday, p *Props) []minusculesvg.Text {
 					}
 					p := dateToCoordinates(dateCursor, p.RectWidth, p.RectHeight, yearOffset+p.Margin+0.8*p.RectWidth, p.Margin+p.HeaderHeight+p.RectHeight*1.5)
 					wYear, w := dateCursor.ISOWeek()
-					text := minusculesvg.NewText(fmt.Sprintf("%02d", w), p.x, p.y, "dateText")
+					text := minusculesvg2.NewText(fmt.Sprintf("%02d", w), p.x, p.y, "dateText")
 					text.Id = fmt.Sprintf("kw-label-%d-%02d", wYear, w)
 					texts = append(texts, text)
 					break
