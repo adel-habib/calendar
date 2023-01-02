@@ -20,6 +20,7 @@ func (app *application) routes() http.Handler {
 	})
 
 	router.HandlerFunc(http.MethodGet, "/", app.home)
+	router.HandlerFunc(http.MethodGet, "/favicon.ico", app.faviconHandler)
 	// Create the middleware chain as normal.
 	standard := alice.New(app.recoverPanic, app.logRequest, secureHeaders)
 	// Wrap the router with the middleware and return it as normal.

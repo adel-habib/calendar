@@ -2,8 +2,9 @@ package main
 
 import (
 	"bytes"
-	"github.com/adel-habib/calendar/pkg/calendar"
 	"net/http"
+
+	"github.com/adel-habib/calendar/pkg/calendar"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -28,4 +29,8 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+func (app *application) faviconHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "favicon.ico")
 }

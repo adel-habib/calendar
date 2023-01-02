@@ -2,10 +2,11 @@ package calendar
 
 import (
 	"fmt"
+	"time"
+
 	holidays2 "github.com/adel-habib/calendar/pkg/holidays"
 	minusculesvg2 "github.com/adel-habib/calendar/pkg/minusculeSVG"
 	"github.com/adel-habib/calendar/pkg/regions"
-	"time"
 )
 
 func (d dayGroup) FormattedDate() string {
@@ -81,7 +82,6 @@ func newFooter(props *Props) (footer headerGroup) {
 	text := minusculesvg2.NewText("calendar.itemis-leipzig.de/?year=2030&amp;region=Sachsen", props.Width/2, props.Height-(props.FooterHeight*0.8), "footerText")
 	footer.Rect = rect
 	footer.Text = text
-	fmt.Println(footer.Text.Text)
 	return
 }
 
